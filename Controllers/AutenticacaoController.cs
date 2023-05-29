@@ -4,6 +4,7 @@ using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Text;
 using WebAPIPessoa.Application.Autenticacao;
+using WebAPIPessoa.Application.Eventos;
 using WebAPIPessoa.Repository;
 
 namespace WebAPIPessoa.Controllers
@@ -34,6 +35,16 @@ namespace WebAPIPessoa.Controllers
                 return Ok(resposta);
             }
 
+        }
+
+        [HttpPost]
+        [Route("esqueciSenha")]
+        public IActionResult Esquecisenha()
+        {
+            var rabbit = new RabbitMQProducer();
+            rabbit.EnviarMensagem();
+
+            return NoContent();
         }
 
     }

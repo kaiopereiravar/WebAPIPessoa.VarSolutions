@@ -13,17 +13,17 @@ namespace WebAPIPessoa.Controllers
     [Route("[controller]")]
     public class AutenticacaoController : ControllerBase
     {
-        private readonly PessoaContext _context;
+        private readonly IAutenticacaoService _autenticacaoService;
 
-        public AutenticacaoController(PessoaContext context)
+        public AutenticacaoController(IAutenticacaoService autenticacaoService)
         {
-            _context = context;
+            _autenticacaoService = autenticacaoService;
         }
+
         [HttpPost]
         public IActionResult Login([FromBody] AutenticacaoRequest request)
         {
-            var autenticacaoService = new AutenticacaoService(_context);//Ele esta pegando todos codigos da "AutenticacaoService", e jogando dentro da variavel
-            var resposta = autenticacaoService.Autenticar(request);
+            var resposta = _autenticacaoService.Autenticar(request);
 
             if (resposta == null) 
             {
@@ -39,12 +39,13 @@ namespace WebAPIPessoa.Controllers
 
         [HttpPost]
         [Route("esqueciSenha")]
-        public IActionResult Esquecisenha()
+        public IActionResult Esquecisenha([FromBody] EsqueciSenhaRequest request)
         {
-            var rabbit = new RabbitMQProducer();
-            rabbit.EnviarMensagem();
-
-            return NoContent();
+            var resposta = _autenticacaoService.EsqueciSenha(request.Email);
+            if (resposta )
+                return NoContent();
+            else
+                return BadRequest();
         }
 
     }

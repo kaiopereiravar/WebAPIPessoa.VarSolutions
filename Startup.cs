@@ -17,6 +17,8 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using WebAPIPessoa.Application.Autenticacao;
+using WebAPIPessoa.Application.Eventos;
 using WebAPIPessoa.Repository;
 
 namespace WebAPIPessoa
@@ -25,7 +27,7 @@ namespace WebAPIPessoa
     {
         public Startup(IConfiguration configuration)
         {
-            Configuration = configuration;
+            Configuration = configuration; //Ele faz referencia ao nosso appsettings.json
         }
 
         public IConfiguration Configuration { get; }
@@ -68,6 +70,9 @@ namespace WebAPIPessoa
                  });
 
             services.AddAuthorization();
+
+            services.AddScoped<IRabbitMQProducer, RabbitMQProducer>();// quando alguem referenciar a interface, ele resolve com a implementação do RabbitMQProducer  
+            services.AddScoped<IAutenticacaoService, AutenticacaoService>();
 
             //REFERENCIANDO O BANCO DE DADOS AQUI
 

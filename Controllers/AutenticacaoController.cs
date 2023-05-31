@@ -42,8 +42,10 @@ namespace WebAPIPessoa.Controllers
         public IActionResult Esquecisenha([FromBody] EsqueciSenhaRequest request)
         {
             var resposta = _autenticacaoService.EsqueciSenha(request.Email);
+
             if (resposta )
                 return NoContent();
+
             else
                 return BadRequest();
         }
